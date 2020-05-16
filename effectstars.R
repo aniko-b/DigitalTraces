@@ -5,6 +5,7 @@ View(full_dat)
 
 library(nnet)
 library(EffectStars2)
+library(graphics)
 
 
 
@@ -40,6 +41,51 @@ str(risk_ratio)
 e_star_risk_ratio <- t(risk_ratio)
 e_star_risk_ratio
 
-#Here are the graphics Helmut wanted
+##Here are the graphics Helmut wanted
 
-effectstars(e_star_risk_ratio)
+#graphical formatting
+ctrl <- star.ctrl(lwd.circle = 3, col.circle = "lightblue", 
+                  lty.circle = 5, col.fill = "lightgrey", lwd.star = 1.8,
+                  cex.main = 1.5, cex.labels = 1.2, col.main = "black",
+                  col.labels = "black", col.star = "black", dist.labels = 1.1, 
+                  font.labels = 1, radius = 1)
+
+
+#add p-values for each of the coefficients
+summary(mod_pol)
+z <- summary(mod_pol)$coefficients/summary(mod_pol)$standard.errors #z calculation for the regression coefficients
+res[[2]] <- z
+p <- (1 - pnorm(abs(z), 0, 1)) * 2 #2-tailed z test
+head(p)
+
+
+# create labels containing the response categories and all p-values
+p_values <- formatC(p, format="f", digits=3)
+labels <- matrix(paste0(rep(c("Search", "Social", "Unknown"), nrow(e_star_risk_ratio)), "\n(", p_values, ")"),
+                 byrow = T, ncol = 3)
+head(labels)
+head(e_star_risk_ratio)
+
+
+#plot effectstars
+
+effectstars(e_star_risk_ratio,
+            names = c("Intercept", "Registered voters", "Voted", rep("Changed mind", 3), 
+                      "Undecided", "Polinterest", "Leftmidright", "Trust in EP", "Trust in NP"), #name of the star
+            subs = c("", rep("(yes)", 2),  "(did not change)", "(did not vote)", "(doesn't remember)", "(yes)" , rep("", 4)), 
+            #category labels of the predictors 
+            labels = labels, #dependent variable categories
+            control = ctrl) #graphic above
+          
+
+
+            
+
+
+
+
+
+
+
+
+
