@@ -61,10 +61,23 @@ effectstars_pol <- function(model)
                     col.labels = "black", col.star = "black", dist.labels = 1.1, 
                     font.labels = 1, radius = 1)
   effectstars(e_star_risk_ratio,
-              names = c("Intercept", "Registered voters", "Voted", rep("Changed mind", 3), 
-                        "Undecided", "Polinterest", "Leftmidright", "Trust in EP", "Trust in NP"), #name of the star
-              subs = c("", rep("(yes)", 2),  "(did not change)", "(did not vote)", "(doesn't remember)", "(yes)" , rep("", 4)), 
-              #category labels of the predictors 
+              names = c("Intercept", #name of the star
+                        "Registered voters", 
+                        "Voted", 
+                        rep("Changed mind", 3), 
+                        "Undecided", 
+                        "Polinterest", 
+                        "Leftmidright", 
+                        "Trust in EP", 
+                        "Trust in NP"), 
+              subs = c("",   #category labels of the predictors 
+                       rep("(yes)", 2),  
+                       "(did not change)", 
+                       "(did not vote)", 
+                       "(doesn't remember)", 
+                       "(yes)" , 
+                       rep("", 4)), 
+              
               labels = labels, #dependent variable categories
               control = ctrl) #graphic above
   
@@ -138,10 +151,32 @@ effectstars_pol_socio <- function(model)
                         rep("Income", 7), 
                         rep("Family", 5), 
                         rep("ISCED", 3)),
-              subs = c("", rep("(yes)", 2),  "(did not change)", "(did not vote)", "(doesn't remember)", "(yes)" , rep("", 4), "(male)",
-                       "", "(2)", "(3+)", "(No)","(500-1000)", "(1000-1500)", "(1500-2000)", "(2000-2500)", "(2500+)" ,"(no income)", "(NA)",
-                       "(divorced with partner)", "(divorced w/o partner)", "(married)", "(single with partner)", "(single w/o partner)", 
-                       "(ISCED3)", "(ISCED4)", "(ISCED8)"), 
+              subs = c("", rep("(yes)", 2),  
+                       "(did not change)", 
+                       "(did not vote)", 
+                       "(doesn't remember)", 
+                       "(yes)" , 
+                       rep("", 4), 
+                       "(male)",
+                       "", 
+                       "(2)", 
+                       "(3+)", 
+                       "(No)",
+                       "(500-1000)", 
+                       "(1000-1500)", 
+                       "(1500-2000)", 
+                       "(2000-2500)",
+                       "(2500+)" ,
+                       "(no income)", 
+                       "(NA)",
+                       "(divorced with partner)", 
+                       "(divorced w/o partner)", 
+                       "(married)", 
+                       "(single with partner)", 
+                       "(single w/o partner)", 
+                       "(ISCED3)", 
+                       "(ISCED4)", 
+                       "(ISCED8)"), 
               #category labels of the predictors 
               labels = labels, #dependent variable categories
               
