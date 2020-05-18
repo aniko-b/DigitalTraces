@@ -13,6 +13,11 @@ full_dat[,c("cluster", "undecided", "polinterest")] <- as.data.frame(apply(full_
 full_dat[,which(sapply(full_dat, is.character))] <- as.data.frame(apply(full_dat[,which(sapply(full_dat, is.character))], 2, factor))
 str(full_dat$cluster)
 
+#ISCED: change from class integer to factor
+
+full_dat$ISCED <- as.factor(full_dat$ISCED)
+class(full_dat$ISCED)
+
 # Splitting the data per countries
 countries <- split(full_dat, full_dat$country)
 France <- countries$France
@@ -20,7 +25,7 @@ UK <- countries$UK
 Germany <- countries$Germany
 
 #Setting the reference category of the response variable for the multinomial logistic regression
-full_dat$cluster <- relevel(full_dat$cluster, ref = "1") # We can later change the reference cluster (now it is routine)
+full_dat$cluster <- relevel(full_dat$cluster, ref = "4") # it is 'unknown' now.
 
 
 ##Political variables
@@ -48,7 +53,7 @@ effectstars_pol <- function(model)
   z <- summary(model)$coefficients/summary(model)$standard.errors #z calculation for the regression coefficients
   p <- (1 - pnorm(abs(z), 0, 1)) * 2 #2-tailed z test
   p_values <- formatC(p, format="f", digits=3) #format p
-  labels <- matrix(paste0(rep(c("Search", "Social", "Unknown"), nrow(e_star_risk_ratio)), "\n(", p_values, ")"),
+  labels <- matrix(paste0(rep(c("Routine", "Search", "Social"), nrow(e_star_risk_ratio)), "\n(", p_values, ")"),
                    byrow = T, ncol = 3) #create labels containing the response categories and all p-values
   ctrl <- star.ctrl(lwd.circle = 3, col.circle = "lightblue", #graphical formatting
                     lty.circle = 5, col.fill = "lightgrey", lwd.star = 1.8,
@@ -82,6 +87,7 @@ effectstars_pol(mod_pol_UK)
 ##Political and sociodemographic variables
 
 
+
 # Political and sociodemographical explanatory variables
 formula_pol_socio <- as.formula(cluster ~ reg_vote + voted + change + undecided + polinterest.num + leftmidright.num + trust.EP +
                                   trust.nat.pol + gender + age_num + children + income + family + ISCED)
@@ -98,7 +104,6 @@ mod_pol_socio_Germany <- multinom(formula_pol_socio, data = Germany)
 mod_pol_socio
 
 
-
 #Function to prepare political and sociodemographic effectstars
 
 effectstars_pol_socio <- function(model)
@@ -109,7 +114,7 @@ effectstars_pol_socio <- function(model)
   z <- summary(model)$coefficients/summary(model)$standard.errors #z calculation for the regression coefficients
   p <- (1 - pnorm(abs(z), 0, 1)) * 2 #2-tailed z test
   p_values <- formatC(p, format="f", digits=3) #format p
-  labels <- matrix(paste0(rep(c("Search", "Social", "Unknown"), nrow(e_star_risk_ratio)), "\n(", p_values, ")"),
+  labels <- matrix(paste0(rep(c("Routine", "Search", "Social"), nrow(e_star_risk_ratio)), "\n(", p_values, ")"),
                    byrow = T, ncol = 3) #create labels containing the response categories and all p-values
   ctrl <- star.ctrl(lwd.circle = 3, col.circle = "lightblue", #graphical formatting
                     lty.circle = 5, col.fill = "lightgrey", lwd.star = 1.8,
@@ -132,10 +137,11 @@ effectstars_pol_socio <- function(model)
                         rep("Chidren", 3), 
                         rep("Income", 7), 
                         rep("Family", 5), 
-                        "ISCED"),
+                        rep("ISCED", 3)),
               subs = c("", rep("(yes)", 2),  "(did not change)", "(did not vote)", "(doesn't remember)", "(yes)" , rep("", 4), "(male)",
                        "", "(2)", "(3+)", "(No)","(500-1000)", "(1000-1500)", "(1500-2000)", "(2000-2500)", "(2500+)" ,"(no income)", "(NA)",
-                       "(divorced with partner)", "(divorced w/o partner)", "(married)", "(single with partner)", "(single w/o partner)", ""),
+                       "(divorced with partner)", "(divorced w/o partner)", "(married)", "(single with partner)", "(single w/o partner)", 
+                       "(ISCED3)", "(ISCED4)", "(ISCED8)"), 
               #category labels of the predictors 
               labels = labels, #dependent variable categories
               
